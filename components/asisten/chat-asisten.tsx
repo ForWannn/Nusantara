@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   BATAS_PESAN,
+  MAKS_PESAN,
   type JawabanAsisten,
   type ModeJawaban,
   type PesanChat,
@@ -98,7 +99,7 @@ export function ChatAsisten({ initialProvinsi }: ChatAsistenProps) {
 
     const sebelumnya = messages;
     const berikutnya = [...messages, pesanPengguna];
-    const untukApi: PesanChat[] = berikutnya.map((pesan) => ({
+    const untukApi: PesanChat[] = berikutnya.slice(-MAKS_PESAN).map((pesan) => ({
       role: pesan.role,
       content: pesan.content,
     }));

@@ -22,6 +22,8 @@ export async function generateOpenAI(
     /\/$/,
     "",
   );
+  const isOpenRouter = baseUrl.includes("openrouter.ai");
+  const isFlint = isOpenRouter && config.model.startsWith("recursive/flint");
 
   const response = await fetch(`${baseUrl}/chat/completions`, {
     method: "POST",
@@ -39,7 +41,8 @@ export async function generateOpenAI(
         })),
       ],
       temperature: 0.3,
-      max_tokens: 700,
+      max_tokens: isFlint ? 1200 : 700,
+      ...(isFlint ? { reasoning: { effort: "low" } } : {}),
     }),
     signal: AbortSignal.timeout(25_000),
   });

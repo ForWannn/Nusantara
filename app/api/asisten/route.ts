@@ -8,6 +8,7 @@ import {
 } from "@/lib/ai";
 import { retrieverKonteks } from "@/lib/ai/retrieval";
 import {
+  BATAS_BALASAN,
   BATAS_PESAN,
   MAKS_PESAN,
   type JawabanAsisten,
@@ -68,8 +69,9 @@ function ambilPesan(nilai: unknown): PesanChat[] | null {
     if (typeof content !== "string") return null;
 
     const teks = content.trim();
+    const batas = role === "user" ? BATAS_PESAN : BATAS_BALASAN;
 
-    if (!teks || teks.length > BATAS_PESAN) return null;
+    if (!teks || teks.length > batas) return null;
 
     pesan.push({ role, content: teks });
   }
@@ -135,7 +137,7 @@ export async function POST(request: Request) {
   if (!pesan) {
     return NextResponse.json(
       {
-        error: `Pesan tidak valid. Gunakan maksimal ${MAKS_PESAN} pesan dan ${BATAS_PESAN} karakter per pesan.`,
+        error: `Pesan tidak valid. Gunakan maksimal ${MAKS_PESAN} pesan dan ${BATAS_PESAN} karakter per pertanyaan.`,
       },
       { status: 400 },
     );

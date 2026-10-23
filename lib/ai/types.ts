@@ -1,4 +1,5 @@
 export const BATAS_PESAN = 500;
+export const BATAS_BALASAN = 6_000;
 export const MAKS_PESAN = 12;
 
 export type PeranPesan = "user" | "assistant";
