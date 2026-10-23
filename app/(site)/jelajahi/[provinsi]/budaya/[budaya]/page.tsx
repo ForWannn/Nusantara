@@ -1,5 +1,6 @@
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -7,6 +8,7 @@ import { BudayaCard } from "@/components/provinsi/budaya-card";
 import { ButtonLink, buttonStyles } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { getProvinsi, provinsiAktif } from "@/content/provinsi";
+import { detailBudaya } from "@/content/provinsi/detail";
 import {
   kategoriIkon,
   kategoriLabel,
@@ -18,6 +20,8 @@ import { cn } from "@/lib/cn";
 type PageProps = {
   params: Promise<{ provinsi: string; budaya: string }>;
 };
+
+export const instant = false;
 
 export function generateStaticParams() {
   return provinsiAktif.flatMap((provinsi) =>
@@ -71,6 +75,12 @@ export default async function BudayaDetailPage({ params }: PageProps) {
   }
 
   const Ikon = kategoriIkon[entri.kategori];
+  const detail = detailBudaya[provinsi.slug]?.[budayaSlug];
+  const gambar = detail?.gambar;
+  const info = detail?.info ?? [];
+  const kreditGambar =
+    [gambar?.kredit, gambar?.lisensi].filter(Boolean).join(" · ") ||
+    (gambar?.host === "commons.wikimedia.org" ? "Wikimedia Commons" : "Wikipedia");
   const entriLain = provinsi.budaya
     .filter((item) => item.judul !== entri.judul)
     .slice(0, 3);
@@ -138,9 +148,59 @@ export default async function BudayaDetailPage({ params }: PageProps) {
                   Kembali ke {provinsi.nama}
                 </Link>
               </div>
+
+              {gambar ? (
+                <figure className="mt-9 overflow-hidden rounded-panel border border-line bg-surface shadow-soft">
+                  <div className="relative aspect-[16/10] bg-sand/45">
+                    <Image
+                      src={gambar.src}
+                      alt={gambar.alt}
+                      fill
+                      priority
+                      sizes="(min-width: 1024px) 58vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                  <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 text-xs leading-relaxed text-muted sm:px-5">
+                    <span>{gambar.caption ?? gambar.alt}</span>
+                    <a
+                      href={gambar.sumber}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline-offset-4 transition-colors hover:text-ink hover:underline"
+                    >
+                      Foto: {kreditGambar}
+                    </a>
+                  </figcaption>
+                </figure>
+              ) : null}
+
+              {info.length > 0 ? (
+                <section
+                  className="mt-10 border-t border-line pt-8"
+                  aria-labelledby="selengkapnya"
+                >
+                  <p className="text-eyebrow uppercase text-muted">
+                    Dari arsip terbuka
+                  </p>
+                  <h2
+                    id="selengkapnya"
+                    className="mt-2 font-serif text-2xl text-ink"
+                  >
+                    Selengkapnya
+                  </h2>
+                  <div className="mt-4 space-y-4 text-[0.95rem] leading-[1.85] text-brown sm:text-base">
+                    {info.map((paragraf, index) => (
+                      <p key={`${entri.judul}-paragraf-${index}`}>
+                        {paragraf}
+                      </p>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
             </div>
 
-            <aside className="rounded-panel border border-line bg-sand/35 p-6">
+            <aside className="rounded-panel border border-line bg-sand/35 p-6 lg:sticky lg:top-24">
               <div className="flex items-center gap-2.5">
                 <span className="flex size-8 items-center justify-center rounded-full bg-surface text-clay-strong">
                   <Ikon className="size-4" strokeWidth={1.6} aria-hidden="true" />
@@ -184,8 +244,9 @@ export default async function BudayaDetailPage({ params }: PageProps) {
               Baca lebih lanjut
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-              Materi di halaman ini adalah ringkasan. Buka sumber asli untuk
-              bacaan lengkap dan konteks yang lebih luas.
+              Ringkasan dan catatan budaya di halaman ini diadaptasi dari
+              Wikipedia bahasa Indonesia dengan lisensi CC BY-SA 4.0. Foto
+              memiliki lisensi masing-masing seperti tercantum di bawah.
             </p>
             {entri.sumber ? (
               <a
@@ -206,6 +267,19 @@ export default async function BudayaDetailPage({ params }: PageProps) {
                 Sumber belum dicantumkan.
               </p>
             )}
+            {gambar ? (
+              <p className="mt-4 text-xs leading-relaxed text-muted">
+                Foto:{" "}
+                <a
+                  href={gambar.sumber}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline-offset-4 transition-colors hover:text-ink hover:underline"
+                >
+                  {kreditGambar || "Wikimedia Commons"}
+                </a>
+              </p>
+            ) : null}
           </div>
         </Container>
       </section>

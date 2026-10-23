@@ -45,7 +45,7 @@ export const sumateraUtara: Provinsi = {
       judul: "Legenda Danau Toba",
       deskripsi:
         "Kisah Toba dan ikan sakti dipercaya sebagai asal-usul Danau Toba; versi cerita rakyat yang populer.",
-      sumber: "https://id.wikipedia.org/wiki/Danau_Toba",
+      sumber: "https://id.wikipedia.org/wiki/Legenda_Danau_Toba",
     },
     {
       kategori: "pariwisata",

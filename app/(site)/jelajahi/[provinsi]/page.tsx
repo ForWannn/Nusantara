@@ -295,9 +295,10 @@ async function ProvinsiContent({ params }: PageProps) {
 
           <p className="mt-10 max-w-3xl text-xs leading-relaxed text-muted">
             Sumber materi: sumber terbuka dan publikasi budaya, tercantum pada
-            halaman tiap entri. Siluet wilayah menggunakan data Natural Earth
-            1:50m (domain publik). Konten akan ditinjau dan dilengkapi secara
-            berkala.
+            halaman tiap entri. Foto berasal dari Wikimedia Commons dengan
+            lisensi masing-masing; kredit lengkap ada di halaman detail. Siluet
+            wilayah menggunakan data Natural Earth 1:50m (domain publik).
+            Konten akan ditinjau dan dilengkapi secara berkala.
           </p>
         </Container>
       </section>

@@ -38,7 +38,7 @@ export const kalimantanBarat: Provinsi = {
       judul: "Legenda Batu Menangis",
       deskripsi:
         "Kisah anak yang durhaka kepada ibunya dan berubah menjadi batu; populer di Kalimantan Barat.",
-      sumber: "https://id.wikipedia.org/wiki/Batu_Menangis",
+      sumber: "https://id.wikipedia.org/wiki/Kisah_Batu_Menangis",
     },
     {
       kategori: "bahasa",
