@@ -1,27 +1,16 @@
+import Image from "next/image";
 import { cn } from "@/lib/cn";
 
 export function LogoMark({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-      className={className}
-    >
-      <path
-        d="M4 20.25V11.5a8 8 0 0 1 16 0v8.75"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-      <path
-        d="M8.75 20.25V11.5a3.25 3.25 0 0 1 6.5 0v8.75"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-      <circle cx="12" cy="16.6" r="1.05" className="fill-clay" />
-    </svg>
+    <Image
+      src="/images/Nusantara.png"
+      alt="Nusantara logo"
+      width={36}
+      height={36}
+      className={cn("object-contain", className)}
+      priority
+    />
   );
 }
 
