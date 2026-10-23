@@ -1,26 +1,189 @@
 @import "tailwindcss";
 
+/*
+ * Token Nusantara
+ * Nilai dasar mengikuti AGENTS.md §4. `--clay-strong` adalah turunan clay yang
+ * cukup gelap untuk teks kecil (kontras ≥ 4.5:1 di atas --bg).
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #faf6f1;
+  --surface: #ffffff;
+  --surface-muted: #fcf9f5;
+  --sand: #eadbcb;
+  --sand-deep: #dcc9b4;
+  --clay: #b58b6b;
+  --clay-strong: #8a6249;
+  --brown: #6b4a3a;
+  --ink: #1e1b19;
+  --muted: #7a6e66;
+  --line: #e7dcd1;
+  --line-strong: #d9c8b9;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-sand: var(--sand);
+  --color-sand-deep: var(--sand-deep);
+  --color-clay: var(--clay);
+  --color-clay-strong: var(--clay-strong);
+  --color-brown: var(--brown);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, Cambria,
+    "Times New Roman", serif;
+
+  --radius-card: 1.125rem;
+  --radius-panel: 1.5rem;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 2px rgb(30 27 25 / 0.04),
+    0 18px 40px -24px rgb(30 27 25 / 0.18);
+  --shadow-lift: 0 2px 6px rgb(30 27 25 / 0.05),
+    0 28px 56px -28px rgb(30 27 25 / 0.24);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.18em;
+  --text-eyebrow--font-weight: 600;
+
+  --text-lead: 1.0625rem;
+  --text-lead--line-height: 1.7;
+
+  --text-display: clamp(2.75rem, 6.4vw, 4.75rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.025em;
+
+  --text-title: clamp(1.75rem, 3.2vw, 2.5rem);
+  --text-title--line-height: 1.12;
+  --text-title--letter-spacing: -0.015em;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Label peta: halo tipis agar garis penunjuk tidak mengganggu teks. */
+@utility map-label {
+  text-shadow:
+    0 0 3px var(--bg),
+    0 0 7px var(--bg),
+    0 0 12px var(--bg);
+}
+
+/* Animasi masuk peta; tetap berjalan tanpa JavaScript. */
+@keyframes peta-muncul {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes peta-isi {
+  from {
+    fill-opacity: 0;
+  }
+  to {
+    fill-opacity: 1;
+  }
+}
+
+@keyframes peta-garis {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes peta-label-geser {
+  from {
+    transform: translateY(3px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@utility peta-masuk {
+  animation: peta-muncul 0.5s var(--ease-soft) both;
+}
+
+@utility peta-label-masuk {
+  animation: peta-label-geser 0.4s var(--ease-soft) backwards;
+}
+
+@utility peta-aktif {
+  stroke-dasharray: 1;
+  animation:
+    peta-garis 0.85s var(--ease-soft) both,
+    peta-isi 0.45s var(--ease-soft) both;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--sand);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--clay-strong);
+    outline-offset: 3px;
+  }
+
+  /* Halaman memakai latar krem; kontrol bawaan browser ikut diselaraskan. */
+  input,
+  button,
+  textarea,
+  select {
+    accent-color: var(--clay-strong);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
 }
